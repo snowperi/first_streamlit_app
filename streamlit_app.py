@@ -21,7 +21,6 @@ fruits_to_show = my_fruit_list.loc[fruits_selected]
 #streamlit.dataframe(my_fruit_list)
 streamlit.dataframe(fruits_to_show)
 
-
 #New Section to display fruitvice api response
 import requests
 streamlit.header('Fruityvise Fruit Advice!')
@@ -41,5 +40,7 @@ streamlit.text("The furit load list contains:")
 streamlit.dataframe(my_data_rows)
 
 #Adding a new text box
-fruit_add = streamlit.text_input('What fruit would you like to add?', 'jackfruit')
-streamlit.write('The user entered', fruit_add)
+add_my_fruit = streamlit.text_input('What fruit would you like to add?', 'jackfruit')
+streamlit.write('The user entered', add_my_fruit)
+streamlit.write('Thanks for adding ', add_my_fruit)
+my_cur.execute("insert into fruit_load_list values ('from streamlit')")
