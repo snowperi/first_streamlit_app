@@ -19,9 +19,6 @@ my_fruit_list = my_fruit_list.set_index('Fruit')
 #let's put a pick list here so they can pick the fruit they want to include
 fruits_selected = streamlit.multiselect("Pick some fruits:", list(my_fruit_list.index), ['Avocado','Strawberries'])
 fruits_to_show = my_fruit_list.loc[fruits_selected]
-
-#display the table on the page
-#streamlit.dataframe(my_fruit_list)
 streamlit.dataframe(fruits_to_show)
 
 #New Section to display fruitvice api response
@@ -40,21 +37,17 @@ except URLError as e:
     streamlit.error()
     
 #import snowflake.connector
-#streamlit.stop()
-#my_cnx = snowflake.connector.connect(**streamlit.secrets["snowflake"])
-#my_cur = my_cnx.cursor()
-#my_cur.execute("SELECT * from fruit_load_list")
-#my_data_rows = my_cur.fetchall()
-streamlit.text("The furit load list contains:")
+streamlit.header("View Our Fruit List - Add Your Favorites!:")
 #Snowflake related functions
 def get_fruit_load_list():
   with my_cnx.cursor() as my_cur:
     my_cur.execute("select * from fruit_load_list")
     return my_cur.fetchall()
 #Add a button to load the fruit
-if streamlit.button('Get Fruit Load List'):
+if streamlit.button('Get Fruit List'):
   my_cnx = snowflake.connector.connect(**streamlit.secrets["snowflake"])
   my_data_rows = get_fruit_load_list()
+  my_cnx.close()
   streamlit.dataframe(my_data_rows)
 
 #Allow the end user to add fruits to the list
@@ -69,5 +62,6 @@ if streamlit.button('Add a Fruit to the List'):
     my_cnx = snowflake.connector.connect(**streamlit.secrets["snowflake"])
     back_from_function = insert_row_snowflake(add_my_fruit)
     streamlit.text(back_from_function)
+    my_cnx.close()
   
 streamlit.write('Thanks for adding a fruit to our list ' + add_my_fruit)
